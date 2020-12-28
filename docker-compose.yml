@@ -12,6 +12,11 @@ services:
         dockerfile: docker/Dockerfile
       image: deowo_website:latest
       container_name: deowo_website
+      healthcheck:
+        test: ["CMD", "service", "nginx", "status"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
       labels:
         - "traefik.enable=true"
         - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
