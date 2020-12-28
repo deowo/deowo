@@ -1,0 +1,27 @@
+---
+version: "3.7"
+
+networks:
+  PROXY_NETWORK:
+    external: true
+
+services:
+  website:
+      build:
+        context: .
+        dockerfile: docker/Dockerfile
+      image: deowo_website:latest
+      container_name: deowo_website
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
+        - "traefik.http.routers.deowo.middlewares=https-redirect"
+        - "traefik.http.routers.deowo.entrypoints=http"
+        - "traefik.http.routers.deowo-secure.tls=true"
+        - "traefik.http.routers.deowo-secure.entrypoints=https"
+        - "traefik.http.routers.deowo-secure.tls.certresolver=http-01-challenge"
+        - "traefik.http.routers.deowo.rule=Host(`deowo.com`, `www.deowo.com`)"
+        - "traefik.http.routers.deowo-secure.rule=Host(`deowo.com`, `www.deowo.com`)"
+      restart: always
+      networks:
+        - PROXY_NETWORK
