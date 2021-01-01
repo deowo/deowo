@@ -1,6 +1,6 @@
 FROM scratch as builder
 WORKDIR /source/
-COPY index.html *.css .
+COPY index.html *.css ./
 
 FROM nginx:mainline-alpine
 WORKDIR /usr/share/nginx/html
