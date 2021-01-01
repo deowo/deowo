@@ -10,23 +10,23 @@ services:
       build:
         context: .
         dockerfile: docker/Dockerfile
-      image: deowo_website:latest
-      container_name: deowo_website
-      healthcheck:
-        test: ["CMD", "service", "nginx", "status"]
-        interval: 30s
-        timeout: 10s
-        retries: 5
+      image: deowo:latest
+      container_name: deowo
+      # healthcheck:
+      #   test: ["CMD", "service", "nginx", "status"]
+      #   interval: 30s
+      #   timeout: 10s
+      #   retries: 5
       labels:
         - "traefik.enable=true"
-        - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
-        - "traefik.http.routers.deowo.middlewares=https-redirect"
+        - "traefik.http.middlewares.httpsredirect.redirectscheme.scheme=https"
+        - "traefik.http.routers.deowo.middlewares=httpsredirect"
         - "traefik.http.routers.deowo.entrypoints=http"
-        - "traefik.http.routers.deowo-secure.tls=true"
-        - "traefik.http.routers.deowo-secure.entrypoints=https"
-        - "traefik.http.routers.deowo-secure.tls.certresolver=http-01-challenge"
+        - "traefik.http.routers.deowosecure.tls=true"
+        - "traefik.http.routers.deowosecure.entrypoints=https"
+        - "traefik.http.routers.deowosecure.tls.certresolver=http01challenge"
         - "traefik.http.routers.deowo.rule=Host(`deowo.com`, `www.deowo.com`)"
-        - "traefik.http.routers.deowo-secure.rule=Host(`deowo.com`, `www.deowo.com`)"
+        - "traefik.http.routers.deowosecure.rule=Host(`deowo.com`, `www.deowo.com`)"
       restart: always
       networks:
         - PROXY_NETWORK
