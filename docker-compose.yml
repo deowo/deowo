@@ -2,7 +2,7 @@
 version: "3.8"
 
 networks:
-  PROXY_NETWORK:
+  proxy:
     external: true
 
 services:
@@ -12,11 +12,6 @@ services:
         dockerfile: docker/Dockerfile
       image: deowo:latest
       container_name: deowo
-      healthcheck:
-        test: ["CMD-SHELL", "wget -O /dev/null http://localhost || exit 1"]
-        interval: 30s
-        timeout: 10s
-        retries: 5
       labels:
         - "traefik.enable=true"
         - "traefik.http.middlewares.httpsredirect.redirectscheme.scheme=https"
@@ -29,4 +24,4 @@ services:
         - "traefik.http.routers.deowosecure.rule=Host(`deowo.com`, `www.deowo.com`)"
       restart: unless-stopped
       networks:
-        - PROXY_NETWORK
+        - proxy
